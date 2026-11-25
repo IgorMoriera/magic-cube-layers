@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cubo Mágico em Camadas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+</head>
+<body>
+<header class="top">
+ <a class="brand" href="#resolver"><span class="mark" aria-hidden="true"><i style="background:#f4f4ef"></i><i style="background:#d6202a"></i><i style="background:#1f5fd6"></i><i style="background:#ffd400"></i><i style="background:#00a651"></i><i style="background:#ff7a00"></i><i style="background:#1f5fd6"></i><i style="background:#f4f4ef"></i><i style="background:#d6202a"></i></span>Cubo em Camadas</a>
+ <nav aria-label="Seções"><a href="#resolver" data-nav="resolver">Resolver</a><a href="#aprender" data-nav="aprender">Aprender</a><a href="#dicas" data-nav="dicas">Dicas</a><a href="#cronometro" data-nav="cronometro">Cronômetro</a></nav>
+</header>
+
+<main>
+<section class="view" id="v-resolver">
+ <div class="hero"><h1>Pinte o seu cubo e veja a solução, giro a giro</h1>
+ <p>Segure o cubo com o <b>branco em cima</b> e o <b>verde de frente</b>. Pinte as 6 faces e toque em Resolver: o cubo 3D mostra cada movimento, seguindo os 7 passos do método de camadas.</p></div>
+ <div class="work">
+  <div class="stage"></div>
+  <div class="panel">
+   <div id="editor" class="panel">
+    <div><p class="lbl">1. Escolha a face</p><div class="faces" id="faces"></div></div>
+    <div class="card"><p class="lbl" id="faceHint"></p><div class="ed" id="ed"></div></div>
+    <div><p class="lbl">2. Escolha a cor e toque nos quadradinhos (o centro é fixo)</p><div class="pal" id="pal"></div></div>
+    <div id="edMsg" class="msg" hidden></div>
+    <div class="row"><button class="btn pri" id="go">Resolver</button><button class="btn" id="rnd">Exemplo embaralhado</button><button class="btn" id="clr">Limpar</button><button class="btn" id="sol">Cubo montado</button></div>
+    <p class="lbl" id="edNote">O cubo começa com um exemplo embaralhado — troque pelas cores do seu.</p>
+   </div>
+   <div id="player" class="panel" hidden>
+    <div class="sum"><b id="pTotal">0</b><span id="pTotalTxt">movimentos no total</span><button class="btn" id="edit" style="margin-left:auto">Editar cores</button></div>
+    <div class="stg" id="pStages"></div>
+    <div class="card" id="pCard"></div>
+    <div class="ctl">
+     <button id="bFirst" aria-label="Início do passo"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
+     <button id="bPrev" aria-label="Voltar um movimento"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17 5v14L6 12z"/></svg></button>
+     <button id="bPlay" class="play" aria-label="Tocar"><svg id="icPlay" width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg><svg id="icPause" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></button>
+     <button id="bNext" aria-label="Avançar um movimento"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5v14l11-7z"/></svg></button>
+     <button id="bLast" aria-label="Próximo passo"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4 5v14l11-7zM16 5h2v14h-2z"/></svg></button>
+    </div>
+    <div class="row"><div class="bar" style="flex:1"><i id="pBar"></i></div><span class="lbl" id="pPos" style="margin:0">0 / 0</span></div>
+    <div class="row"><span class="lbl" style="margin:0">Velocidade</span><div class="seg" id="spd"><button data-s=".5">0,5×</button><button data-s="1" class="on">1×</button><button data-s="2">2×</button><button data-s="4">4×</button></div></div>
+    <details open><summary>Todos os movimentos</summary><div class="strip" id="pStrip"></div></details>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="view" id="v-aprender">
+ <div class="hero"><h1>O método de camadas em 7 passos</h1>
+ <p>Os 7 passos ensinados na playlist <a href="https://www.youtube.com/playlist?list=PL47C27021F8B9383E">Método de Camadas</a> do canal Montar Cubo Mágico. Passe os cartões: em cada caso, o cubo mostra a situação e executa o algoritmo. As peças que ainda não importam ficam cinza.</p></div>
+ <div class="work">
+  <div class="stage"></div>
+  <div class="car">
+   <div class="carnav"><div class="dots" id="dots"></div><button data-d="-1" aria-label="Cartão anterior"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 4v16L5 12z"/></svg></button><button data-d="1" aria-label="Próximo cartão"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 4v16l11-8z"/></svg></button></div>
+   <div class="track" id="track"></div>
+  </div>
+ </div>
+</section>
+
+<section class="view" id="v-dicas">
+ <div class="hero"><h1>Dicas para montar mais rápido</h1>
+ <p>Os temas da playlist <a href="https://www.youtube.com/playlist?list=PLvPafHk1XLU0t8DCAIqEvFtjLrDsTahTU">Dicas de Como Montar o Cubo Mágico Mais Rápido</a>: atalhos para o mesmo método de camadas. Os algoritmos aqui foram conferidos no simulador do próprio site.</p></div>
+ <div class="work">
+  <div class="stage"></div>
+  <div class="tips" id="tips"></div>
+ </div>
+</section>
+
+<section class="view" id="v-cronometro">
+ <div class="hero"><h1>Cronômetro de treino</h1>
+ <p>Embaralhe o cubo com a sequência abaixo (branco em cima, verde de frente), toque no relógio ou aperte espaço para começar e de novo para parar.</p></div>
+ <div class="work">
+  <div class="stage"></div>
+  <div class="panel">
+   <div class="card"><p class="lbl">Embaralhamento</p><div class="mvs" id="scr"></div>
+    <div class="row" style="margin-top:12px"><button class="btn" id="newScr">Novo embaralhamento</button><button class="btn" id="showScr">Embaralhar no 3D</button></div></div>
+   <div class="clock" id="clock" role="button" tabindex="0" aria-label="Iniciar ou parar o cronômetro"><b id="clockT">0.00</b><span id="clockS">Toque para começar</span></div>
+   <div class="stats"><div><b id="sBest">–</b><span>Melhor</span></div><div><b id="sAo5">–</b><span>Média de 5</span></div><div><b id="sN">0</b><span>Resoluções</span></div></div>
+   <div><p class="lbl">Histórico (fica salvo só neste navegador)</p><table><tbody id="hist"></tbody></table></div>
+  </div>
+ </div>
+</section>
+</main>
+
+<section class="legend" id="legenda"><div class="in">
+ <h2>Legenda dos códigos</h2>
+ <p>Cada letra é uma face, pelas iniciais em inglês. Letra sozinha: gire no sentido horário, olhando de frente para aquela face. Com apóstrofo (<b>'</b>): anti-horário. Com <b>2</b>: meia volta. Toque num código para ver o giro no cubo — e acompanhe aqui qual está sendo executado.</p>
+ <div class="fams" id="fams"></div>
+</div></section>
+<footer>Método e sequência dos passos: canal <b>Montar Cubo Mágico</b> — playlists <a href="https://www.youtube.com/playlist?list=PL47C27021F8B9383E">Método de Camadas</a> e <a href="https://www.youtube.com/playlist?list=PLvPafHk1XLU0t8DCAIqEvFtjLrDsTahTU">Dicas para montar mais rápido</a>; algoritmos conferidos no material escrito do mesmo método em <a href="https://cinoto.com.br/cubomagico/principais/camadas/">cinoto.com.br</a>. Cubo 3D feito com p5.js. Esquema de cores padrão: branco oposto ao amarelo, verde ao azul, vermelho ao laranja.</footer>
+
+<script src="js/engine.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

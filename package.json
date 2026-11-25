@@ -1,0 +1,10 @@
+{
+  "name": "cubo-magico-camadas",
+  "version": "1.0.0",
+  "description": "Site interativo que ensina o método de camadas do cubo mágico, com cubo 3D em p5.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  }
+}
